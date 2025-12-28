@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+coverage/
+dist/
+build/
+
+# Config files (pueden usar CommonJS sin problemas)
+*.config.js
+
+# Logs
+*.log
