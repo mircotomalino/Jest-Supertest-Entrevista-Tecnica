@@ -178,8 +178,12 @@ El proyecto sigue principios de arquitectura limpia para tests:
 ├── package.json
 ├── jest.config.js
 ├── .eslintrc.js           # Configuración de ESLint
+├── .cursorrules           # Reglas de contexto para Cursor AI
 ├── README.md
 ├── .gitignore
+├── docs/
+│   ├── TESTING_GUIDELINES.md  # Guía de buenas prácticas de testing
+│   └── ARCHITECTURE.md        # Documentación de arquitectura
 ├── src/
 │   ├── config/
 │   │   └── test.config.js          # Configuración centralizada para tests
@@ -204,8 +208,15 @@ El proyecto sigue principios de arquitectura limpia para tests:
 - **`tests/setup.js`**: Configuración global de Jest (timeouts, setup global)
 - **`tests/api/`**: Tests organizados por área funcional
 
+## Documentación Adicional
+
+- **`.cursorrules`**: Reglas de contexto para Cursor AI que ayudan a mantener consistencia en el código
+- **`docs/TESTING_GUIDELINES.md`**: Guía detallada de buenas prácticas de testing
+- **`docs/ARCHITECTURE.md`**: Documentación de la arquitectura y decisiones de diseño
+
 ## Notas Adicionales
 
 - Los tests incluyen comentarios explicativos para facilitar el mantenimiento y la comprensión del propósito de cada verificación.
 - Las aserciones se enfocan en validaciones de negocio, no solo en códigos HTTP.
 - Los nombres de los tests son descriptivos y explican claramente qué se está validando.
+- El proyecto incluye archivos de contexto para IDEs y herramientas de AI como Cursor.

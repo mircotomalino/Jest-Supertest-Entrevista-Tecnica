@@ -21,6 +21,9 @@ npm-debug.log*
 *.swp
 *.swo
 
+# Cursor
+.cursor/
+
 # OS
 .DS_Store
 Thumbs.db

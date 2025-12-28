@@ -1,0 +1,160 @@
+# Cursor Rules para QA Automation Exercise
+
+## Contexto del Proyecto
+
+Este es un proyecto de QA Automation para ejercicio técnico que demuestra:
+- Diseño de tests críticos basados en análisis de riesgo
+- Uso profesional de Jest y Supertest
+- Arquitectura limpia para tests automatizados
+- Buenas prácticas de testing y calidad de código
+
+## Estructura del Proyecto
+
+```
+Pulpou/
+├── src/
+│   ├── config/          # Configuración centralizada (URLs, tokens, endpoints)
+│   ├── fixtures/        # Datos de prueba reutilizables (fixtures pattern)
+│   ├── helpers/         # Funciones auxiliares (DRY principle)
+│   └── mocks/           # Mock de aplicación Express para Supertest
+└── tests/
+    ├── api/             # Tests organizados por área funcional
+    └── setup.js         # Configuración global de Jest
+```
+
+## Convenciones de Código
+
+### Testing
+- Usar `it` en lugar de `test` dentro de `describe` (Jest best practice)
+- Tests deben seguir patrón AAA: Arrange, Act, Assert
+- Comentarios en español explicando el propósito de cada verificación
+- Nombres descriptivos que expliquen qué se está validando
+- Cada test debe validar un comportamiento específico
+- Tests deben ser independientes (no depender de otros tests)
+
+### Estilo de Código
+- ESLint configurado con reglas estrictas
+- 2 espacios de indentación
+- Comillas simples para strings
+- Punto y coma obligatorio
+- No trailing spaces
+- Newline al final de archivos
+- Arrow functions preferidas con return implícito cuando sea posible
+
+## Reglas de Testing
+
+### Principios Fundamentales
+1. **Tests críticos basados en riesgo**: Priorizar casos que tienen mayor impacto en el negocio
+2. **Validaciones de negocio > HTTP status**: Validar lógica de negocio, no solo códigos HTTP
+3. **Fixtures Pattern**: Usar fixtures para datos de prueba reutilizables
+4. **DRY Principle**: Helpers para evitar código duplicado
+5. **Cleanup entre tests**: Limpiar estado entre tests para independencia
+
+### Estructura de Tests
+```javascript
+describe('Feature Description', () => {
+  let app; // Setup común
+  
+  beforeAll(() => {
+    // Inicialización una vez
+  });
+  
+  beforeEach(() => {
+    // Limpieza antes de cada test
+  });
+  
+  it('should describe specific behavior', async () => {
+    // Arrange: Preparar datos y contexto
+    // Act: Ejecutar la acción a probar
+    // Assert: Verificar el resultado esperado
+  });
+});
+```
+
+## API Testing Best Practices
+
+### Request Construction
+- Usar `withAuth()` helper para requests autenticados
+- Usar `ENDPOINTS` constantes para rutas (no hardcodear URLs)
+- Centralizar configuración en `test.config.js`
+
+### Validaciones
+- Verificar integridad de datos (comparar request vs response)
+- Validar mensajes de error semánticos y descriptivos
+- Tests de duplicados deben validar reglas de negocio específicas
+- Verificar campos obligatorios explícitamente
+
+### Mock Strategy
+- Mock de Express app en `/src/mocks/app.mock.js`
+- Almacén en memoria para simular persistencia
+- Limpiar estado entre tests con `clearProductStore()`
+- Mock debe simular comportamiento real de la API (validaciones, respuestas, errores)
+
+## Fixtures y Helpers
+
+### Fixtures (`src/fixtures/`)
+- Centralizar datos de prueba para reutilización
+- Exportar objetos/arrays reutilizables
+- Pueden incluir funciones helper para generar datos dinámicos
+
+### Helpers (`src/helpers/`)
+- Funciones puras que encapsulan lógica común
+- Ejemplo: `withAuth()` para agregar headers de autenticación
+- DRY: evitar repetir código en múltiples tests
+
+## Configuración
+
+### Jest
+- Configuración en `jest.config.js`
+- Setup global en `tests/setup.js`
+- Timeout configurado apropiadamente para tests async
+
+### ESLint
+- Reglas estrictas para calidad de código
+- Plugin de Jest para reglas específicas de testing
+- Auto-fix disponible con `npm run lint:fix`
+
+## Casos de Prueba Críticos
+
+### 1. Happy Path (201 Created)
+**Objetivo**: Validar que el flujo principal funciona correctamente
+**Validaciones**:
+- HTTP status 201
+- Integridad del payload (todos los campos preservados)
+- Campos obligatorios presentes
+- Backend no muta datos
+
+### 2. Duplicados (409 Conflict)
+**Objetivo**: Validar reglas de negocio de unicidad
+**Validaciones**:
+- HTTP status 409
+- Mensaje de error semántico y descriptivo
+- Detalles del conflicto en la respuesta
+- Regla de negocio: seller.id + marketplace + title
+
+## Comandos Útiles
+
+```bash
+npm test              # Ejecutar tests
+npm run test:watch    # Watch mode
+npm run lint          # Ejecutar linter
+npm run lint:fix      # Corregir errores automáticamente
+npm run validate      # Lint + tests
+```
+
+## Cuando Agregar Nuevos Tests
+
+1. **Identificar el riesgo**: ¿Qué podría fallar y qué impacto tiene?
+2. **Diseñar el test**: Seguir patrón AAA
+3. **Usar fixtures**: Reutilizar datos existentes o crear nuevos
+4. **Validar negocio**: Más allá de códigos HTTP
+5. **Documentar**: Comentarios explicando el propósito
+
+## Anti-patterns a Evitar
+
+- ❌ Tests que dependen del orden de ejecución
+- ❌ Validar solo HTTP status sin verificar lógica de negocio
+- ❌ Hardcodear valores en lugar de usar fixtures/config
+- ❌ Tests sin cleanup (estado compartido entre tests)
+- ❌ Nombres de tests vagos o genéricos
+- ❌ Código duplicado en múltiples tests
